@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Routine Generator</title>
+    <link rel="stylesheet" href="style.css"> 
+    <script src="script.js" defer></script> 
+</head>
+<body>
+    <h1>Workout Routine Generator</h1>
+
+    <label for="workoutType">Choose Workout Type:</label>
+    <select id="workoutType">
+        <option value="push">Push</option>
+        <option value="pull">Pull</option>
+        <option value="legs">Legs</option>
+    </select>
+
+    <label for="duration">Choose Duration (minutes):</label>
+    <select id="duration">
+        <option value="30">30</option>
+        <option value="45">45</option>
+        <option value="60">60</option>
+        <option value="75">75</option>
+    </select>
+
+    <button onclick="generateWorkout()">Generate Workout</button>
+
+    <div id="workoutDisplay"></div>
+</body>
+</html>
