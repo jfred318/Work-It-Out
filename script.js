@@ -25,6 +25,9 @@ function generateWorkout() {
 
     let numExercises;
     switch (duration) {
+        case 15:
+            numExercises = 2;
+            break;
         case 30:
             numExercises = 3;
             break;
