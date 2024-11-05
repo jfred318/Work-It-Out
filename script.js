@@ -44,7 +44,7 @@ function generateWorkout() {
                 numExercises = 7;
                 break;
         default:
-            numExercises = 3;
+            numExercises = 2;
     }
 
     const selectedExercises = [];
