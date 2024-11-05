@@ -3,18 +3,22 @@ function generateWorkout() {
     const duration = parseInt(document.getElementById("duration").value);
 
     const exercises = {
-        push: ["Flat Barbell Bench Press", "Overhead Shoulder Press", "Chest Flyes", 
-               "Incline Barbell Bench Press", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Push Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press"],
-        pull: ["Deadlifts", "Bent-Over Rows", "Barbell Bicep Curls", "Face Pulls", 
-               "Lat Pulldowns", "Cable Rows", "Hammer Curls", "Reverse Flyes", "Shrugs"],
-        legs: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Romanian Deadlifts", 
-               "Leg Extensions", "Hamstring Curls", "Goblet Squats", "Bulgarian Split Squats", "Step-Ups"]
+        push: ["Flat Barbell Bench Press", "Overhead Shoulder Press", "Chest Flyes", "Arnold press", "Incline Barbell Bench Press", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Push Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press"],
+        pull: ["Deadlifts", "Bent-Over Rows", "Barbell Bicep Curls", "Face Pulls", "Two-Arm Lat Pulldowns", "Cable Rows", "Hammer Curls", "Reverse Flyes", "Shrugs", "Cable Curls", "Single-Arm Lat Pulldowns", "Preacher Curls"],
+        legs: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Romanian Deadlifts", "Leg Extensions", "Hamstring Curls", "Goblet Squats", "Bulgarian Split Squats", "Step-Ups"],
+        sharms: ["Overhead Shoulder Press", "Arnold Press", "Barbell Bicep Curls", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Hammer Curls", "Cable Curls", "Preacher Curls", "Forearm Curls"],
+        chest: ["Flat Barbell Bench Press", "Two-Arm Chest Flyes", "Single-Arm Chest Flyes", "Incline Barbell Bench Press", "Close-Grip Bench Press", "Push Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press"],
+        back: ["Deadlifts", "Bent-Over Rows", "Face Pulls",  "Two-Arm Lat Pulldowns", "Single-Arm Lat Pulldowns", "Cable Rows", "Reverse Flyes", "Shrugs"]
+
     };
 
     const warmUps = {
         push: ["Push-Ups", "Tricep Dips", "Arm Circles"],
-        pull: ["Pull-Ups", "Face Pulls"],
-        legs: ["Bodyweight Squats", "Box Jumps", "Leg Swings", "Incline Treadmill Walk"]
+        pull: ["Wide-Grip Pull-Ups", "Face Pulls", "Narrow Pull-Ups"],
+        legs: ["Bodyweight Squats", "Box Jumps", "Leg Swings", "Incline Treadmill Walk"],
+        sharms: ["Push-Ups", "Tricep Dips", "Arm Circles"],
+        chest: ["Push-Ups", "Tricep Dips", "Arm Circles"],
+        back: ["Wide-Grip Pull-Ups", "Face Pulls", "Narrow Pull-Ups"]
     };
 
     const warmUpExercise = warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)];
@@ -33,6 +37,9 @@ function generateWorkout() {
         case 75:
             numExercises = 6;
             break;
+            case 90:
+                numExercises = 7;
+                break;
         default:
             numExercises = 3;
     }
