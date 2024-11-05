@@ -3,9 +3,9 @@ function generateWorkout() {
     const duration = parseInt(document.getElementById("duration").value);
 
     const exercises = {
-        push: ["Flat Barbell Bench Press", "Overhead Shoulder Press", "Tricep Dips", "Push-Ups", "Chest Flyes", 
+        push: ["Flat Barbell Bench Press", "Overhead Shoulder Press", "Chest Flyes", 
                "Incline Barbell Bench Press", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Push Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press"],
-        pull: ["Deadlifts", "Bent-Over Rows", "Bicep Curls", "Face Pulls", 
+        pull: ["Deadlifts", "Bent-Over Rows", "Barbell Bicep Curls", "Face Pulls", 
                "Lat Pulldowns", "Cable Rows", "Hammer Curls", "Reverse Flyes", "Shrugs"],
         legs: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Romanian Deadlifts", 
                "Leg Extensions", "Hamstring Curls", "Goblet Squats", "Bulgarian Split Squats", "Step-Ups"]
@@ -14,7 +14,7 @@ function generateWorkout() {
     const warmUps = {
         push: ["Push-Ups", "Tricep Dips", "Arm Circles"],
         pull: ["Pull-Ups", "Face Pulls"],
-        legs: ["Bodyweight Squats", "Lunges", "Leg Swings", "Incline Treadmill Walk"]
+        legs: ["Bodyweight Squats", "Box Jumps", "Leg Swings", "Incline Treadmill Walk"]
     };
 
     const warmUpExercise = warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)];
