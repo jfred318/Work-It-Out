@@ -6,7 +6,7 @@ function generateWorkout() {
     const exercises = {
         push: {
             compound: ["Flat Barbell Bench Press", "Overhead Shoulder Press", "Incline Barbell Bench Press", "Push Press"],
-            isolation: ["Chest Flyes", "Arnold Press", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press"]
+            isolation: ["Chest Flyes", "Arnold Press", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Close-Grip Bench Press", "Flat Dumbbell Bench Press", "Incline Dumbbell Bench Press", "Skull Crushers"]
         },
         pull: {
             compound: ["Deadlifts", "Bent-Over Rows", "Two-Arm Lat Pulldowns"],
@@ -18,7 +18,7 @@ function generateWorkout() {
         },
         sharms: {
             compound: ["Overhead Shoulder Press", "Arnold Press"],
-            isolation: ["Barbell Bicep Curls", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Hammer Curls", "Cable Curls", "Forearm Curls"]
+            isolation: ["Barbell Bicep Curls", "Lateral Raises", "Frontal Raises", "Tricep Extensions", "Hammer Curls", "Cable Curls", "Forearm Curls", "Skull Crushers"]
         },
         chest: {
             compound: ["Flat Barbell Bench Press", "Incline Barbell Bench Press", "Push Press"],
