@@ -38,3 +38,39 @@ button:hover {
     border: 1px solid #ccc; 
     border-radius: 5px;
 }
+
+
+.exercise-section {
+    margin: 15px 0;
+}
+
+.exercise-item {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.exercise-name {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.exercise-name:hover {
+    background-color: #e9ecef;
+}
+
+.exercise-name.locked {
+    background-color: #d3d3d3;
+}
+
+.exercise-description {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+    padding-left: 10px;
+    border-left: 3px solid #28a745;
+}
