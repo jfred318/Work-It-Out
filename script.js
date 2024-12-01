@@ -22,6 +22,9 @@ const exercises = {
     back: {
         compound: ["Deadlifts", "Bent-Over Rows", "Two-Arm Lat Pulldowns"],
         isolation: ["Single-Arm Lat Pulldowns", "Cable Rows", "Reverse Flyes", "Shrugs"]
+    },
+    abs: {
+        isolation: ["Plank", "Bicycle Crunches", "Mountain Climbers", "Russian Twists", "Leg Raises", "V-Ups", "Dead Bug", "Flutter Kicks", "Kneeling Cable Curls"]
     }
 };
 
@@ -31,7 +34,8 @@ const warmUps = {
     legs: ["Bodyweight Squats", "Box Jumps", "Leg Swings", "Incline Treadmill Walk"],
     sharms: ["Push-Ups", "Tricep Dips", "Arm Circles"],
     chest: ["Push-Ups", "Tricep Dips", "Arm Circles"],
-    back: ["Wide-Grip Pull-Ups", "Face Pulls", "Narrow Pull-Ups"]
+    back: ["Wide-Grip Pull-Ups", "Face Pulls", "Narrow Pull-Ups"],
+    abs: []
 };
 
 
@@ -78,6 +82,17 @@ const exerciseDescriptions = {
     "Single-Arm Chest Flyes":"Isolate one pectoral muscle at a time using cables or dumbbells.",
     "Skull Crushers":"Lift dumbbell with two hands behind and over your head",
     
+    "Plank":"Hold your body in a straight line, engaging your core for stability.",
+    "Bicycle Crunches":"Alternate elbow-to-knee twists to target obliques and upper abs.",
+    "Mountain Climbers":"Run knees towards chest in a plank, engaging abs and cardio.",
+    "Russian Twists":"Rotate torso side-to-side with feet raised, targeting obliques.",
+    "Leg Raises":"Lift straight legs while lying down, engaging lower abs and hip flexors.",
+    "V-Ups":"Simultaneously raise legs and upper body, forming a 'V' shape.",
+    "Dead Bug":"Alternate extending opposite arm and leg, maintaining core stability.",
+    "Flutter Kicks":"Kick legs up and down in a controlled motion while lying down.",
+    "Toe Touches":"Reach towards your toes with straight legs to engage upper abs.",
+    "Kneeling Cable Curls":"Hold a cable above your head in kneeling position. Curl down towards ground.",
+
  
     "Push-Ups": "Basic but effective push exercise. Works chest, shoulders, triceps.",
     "Tricep Dips": "Lower and raise body using triceps. Great bodyweight exercise.",
@@ -97,115 +112,141 @@ function generateWorkout() {
     const duration = parseInt(document.getElementById("duration").value);
 
     let numCompound, numIsolation;
-    switch (duration) {
-        case 15:
-            numCompound = 2;
-            numIsolation = 0;
-            break;
-        case 30:
-            numCompound = 2;
-            numIsolation = 1;
-            break;
-        case 45:
-            numCompound = 2;
-            numIsolation = 2;
-            break;
-        case 60:
-            numCompound = 3;
-            numIsolation = 2;
-            break;
-        case 75:
-            numCompound = 3;
-            numIsolation = 3;
-            break;
-        case 90:
-            numCompound = 3;
-            numIsolation = 4;
-            break;
-        default:
-            numCompound = 2;
-            numIsolation = 0;
+    if (workoutType === 'abs') {
+        switch (duration) {
+            case 15:
+                numIsolation = 2;
+                break;
+            case 30:
+                numIsolation = 3;
+                break;
+            case 45:
+                numIsolation = 4;
+                break;
+            case 60:
+                numIsolation = 5;
+                break;
+            case 75:
+                numIsolation = 6;
+                break;
+            case 90:
+                numIsolation = 7;
+                break;
+            default:
+                numIsolation = 2;
+        }
+        numCompound = 0;
+    } else {
+        // Existing logic for other workout types
+        switch (duration) {
+            case 15:
+                numCompound = 2;
+                numIsolation = 0;
+                break;
+            case 30:
+                numCompound = 2;
+                numIsolation = 1;
+                break;
+            case 45:
+                numCompound = 2;
+                numIsolation = 2;
+                break;
+            case 60:
+                numCompound = 3;
+                numIsolation = 2;
+                break;
+            case 75:
+                numCompound = 3;
+                numIsolation = 3;
+                break;
+            case 90:
+                numCompound = 3;
+                numIsolation = 4;
+                break;
+            default:
+                numCompound = 2;
+                numIsolation = 0;
+        }
     }
+    const warmUpExercise = workoutType === 'abs' ? null : 
+    warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)];
 
-
-    const warmUpExercise = warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)];
-    
- 
-    const compoundExercises = [];
+const compoundExercises = workoutType === 'abs' ? [] : (() => {
     const availableCompound = [...exercises[workoutType].compound];
-    
-
     const lockedCompound = availableCompound.filter(ex => lockedExercises.has(ex));
-    compoundExercises.push(...lockedCompound);
-    
-
     const remainingCompound = availableCompound.filter(ex => !lockedExercises.has(ex));
+    const result = [...lockedCompound];
     
-
-    while (compoundExercises.length < numCompound && remainingCompound.length > 0) {
+    while (result.length < numCompound && remainingCompound.length > 0) {
         const randomIndex = Math.floor(Math.random() * remainingCompound.length);
-        compoundExercises.push(remainingCompound[randomIndex]);
+        result.push(remainingCompound[randomIndex]);
         remainingCompound.splice(randomIndex, 1);
     }
     
-  
-    const isolationExercises = [];
+    return result;
+})();
+
+const isolationExercises = (() => {
     const availableIsolation = [...exercises[workoutType].isolation];
-    
-
     const lockedIsolation = availableIsolation.filter(ex => lockedExercises.has(ex));
-    isolationExercises.push(...lockedIsolation);
-    
- 
     const remainingIsolation = availableIsolation.filter(ex => !lockedExercises.has(ex));
+    const result = [...lockedIsolation];
     
-
-    while (isolationExercises.length < numIsolation && remainingIsolation.length > 0) {
+    while (result.length < numIsolation && remainingIsolation.length > 0) {
         const randomIndex = Math.floor(Math.random() * remainingIsolation.length);
-        isolationExercises.push(remainingIsolation[randomIndex]);
+        result.push(remainingIsolation[randomIndex]);
         remainingIsolation.splice(randomIndex, 1);
     }
+    
+    return result;
+})();
 
-
-    const workoutDisplay = document.getElementById("workoutDisplay");
-    workoutDisplay.innerHTML = `
-        <p><strong>Workout Type:</strong> ${workoutType.charAt(0).toUpperCase() + workoutType.slice(1)}</p>
-        <p><strong>Duration:</strong> ${duration} minutes</p>
-        <div class="exercise-section">
-            <p><strong>Warm-Up:</strong></p>
+const workoutDisplay = document.getElementById("workoutDisplay");
+workoutDisplay.innerHTML = `
+    <p><strong>Workout Type:</strong> ${workoutType.charAt(0).toUpperCase() + workoutType.slice(1)}</p>
+    <p><strong>Duration:</strong> ${duration} minutes</p>
+    
+    ${workoutType !== 'abs' && warmUpExercise ? `
+    <div class="exercise-section">
+        <p><strong>Warm-Up:</strong></p>
+        <div class="exercise-item">
+            <span>${warmUpExercise}</span>
+            <div class="exercise-description">${exerciseDescriptions[warmUpExercise] || "Description not available."}</div>
+        </div>
+    </div>
+    ` : ''}
+    
+    ${workoutType !== 'abs' ? `
+    <div class="exercise-section">
+        <p><strong>Compound Exercises:</strong></p>
+        ${compoundExercises.map(exercise => `
             <div class="exercise-item">
-                <span>${warmUpExercise}</span>
-                <div class="exercise-description">${exerciseDescriptions[warmUpExercise] || "Description not available."}</div>
+                <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
+                      onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
+                <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
             </div>
-        </div>
-        <div class="exercise-section">
-            <p><strong>Compound Exercises:</strong></p>
-            ${compoundExercises.map(exercise => `
-                <div class="exercise-item">
-                    <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
-                          onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
-                    <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
-                </div>
-            `).join('')}
-        </div>
-        <div class="exercise-section">
-            <p><strong>Isolation Exercises:</strong></p>
-            ${isolationExercises.map(exercise => `
-                <div class="exercise-item">
-                    <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
-                          onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
-                    <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+        `).join('')}
+    </div>
+    ` : ''}
+    
+    <div class="exercise-section">
+        <p><strong>Isolation Exercises:</strong></p>
+        ${isolationExercises.map(exercise => `
+            <div class="exercise-item">
+                <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
+                      onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
+                <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
+            </div>
+        `).join('')}
+    </div>
+`;
 }
 
 function toggleLock(exercise) {
-    if (lockedExercises.has(exercise)) {
-        lockedExercises.delete(exercise);
-    } else {
-        lockedExercises.add(exercise);
-    }
-    generateWorkout(); 
+if (lockedExercises.has(exercise)) {
+    lockedExercises.delete(exercise);
+} else {
+    lockedExercises.add(exercise);
+}
+generateWorkout(); 
 }
