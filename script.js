@@ -111,33 +111,20 @@ function generateWorkout() {
     const workoutType = document.getElementById("workoutType").value;
     const duration = parseInt(document.getElementById("duration").value);
 
-    let numCompound, numIsolation;
+    let numCompound = 0, numIsolation = 0;
+    
+    // Adjust exercise numbers based on workout type and duration
     if (workoutType === 'abs') {
         switch (duration) {
-            case 15:
-                numIsolation = 2;
-                break;
-            case 30:
-                numIsolation = 3;
-                break;
-            case 45:
-                numIsolation = 4;
-                break;
-            case 60:
-                numIsolation = 5;
-                break;
-            case 75:
-                numIsolation = 6;
-                break;
-            case 90:
-                numIsolation = 7;
-                break;
-            default:
-                numIsolation = 2;
+            case 15: numIsolation = 2; break;
+            case 30: numIsolation = 3; break;
+            case 45: numIsolation = 4; break;
+            case 60: numIsolation = 5; break;
+            case 75: numIsolation = 6; break;
+            case 90: numIsolation = 7; break;
+            default: numIsolation = 2;
         }
-        numCompound = 0;
     } else {
-        // Existing logic for other workout types
         switch (duration) {
             case 15:
                 numCompound = 2;
@@ -168,85 +155,85 @@ function generateWorkout() {
                 numIsolation = 0;
         }
     }
-    const warmUpExercise = workoutType === 'abs' ? null : 
-    warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)];
 
-const compoundExercises = workoutType === 'abs' ? [] : (() => {
-    const availableCompound = [...exercises[workoutType].compound];
-    const lockedCompound = availableCompound.filter(ex => lockedExercises.has(ex));
-    const remainingCompound = availableCompound.filter(ex => !lockedExercises.has(ex));
-    const result = [...lockedCompound];
-    
-    while (result.length < numCompound && remainingCompound.length > 0) {
-        const randomIndex = Math.floor(Math.random() * remainingCompound.length);
-        result.push(remainingCompound[randomIndex]);
-        remainingCompound.splice(randomIndex, 1);
-    }
-    
-    return result;
-})();
+    // Warm-up selection
+    const warmUpExercise = (workoutType !== 'abs' && warmUps[workoutType].length > 0) 
+        ? warmUps[workoutType][Math.floor(Math.random() * warmUps[workoutType].length)]
+        : null;
 
-const isolationExercises = (() => {
-    const availableIsolation = [...exercises[workoutType].isolation];
-    const lockedIsolation = availableIsolation.filter(ex => lockedExercises.has(ex));
-    const remainingIsolation = availableIsolation.filter(ex => !lockedExercises.has(ex));
-    const result = [...lockedIsolation];
-    
-    while (result.length < numIsolation && remainingIsolation.length > 0) {
-        const randomIndex = Math.floor(Math.random() * remainingIsolation.length);
-        result.push(remainingIsolation[randomIndex]);
-        remainingIsolation.splice(randomIndex, 1);
-    }
-    
-    return result;
-})();
+    // Compound exercises selection
+    const compoundExercises = workoutType === 'abs' 
+        ? [] 
+        : selectExercises(exercises[workoutType].compound, numCompound);
 
-const workoutDisplay = document.getElementById("workoutDisplay");
-workoutDisplay.innerHTML = `
-    <p><strong>Workout Type:</strong> ${workoutType.charAt(0).toUpperCase() + workoutType.slice(1)}</p>
-    <p><strong>Duration:</strong> ${duration} minutes</p>
-    
-    ${workoutType !== 'abs' && warmUpExercise ? `
-    <div class="exercise-section">
-        <p><strong>Warm-Up:</strong></p>
-        <div class="exercise-item">
-            <span>${warmUpExercise}</span>
-            <div class="exercise-description">${exerciseDescriptions[warmUpExercise] || "Description not available."}</div>
+    // Isolation exercises selection
+    const isolationExercises = selectExercises(exercises[workoutType].isolation, numIsolation);
+
+    const workoutDisplay = document.getElementById("workoutDisplay");
+    workoutDisplay.innerHTML = `
+        <p><strong>Workout Type:</strong> ${workoutType.charAt(0).toUpperCase() + workoutType.slice(1)}</p>
+        <p><strong>Duration:</strong> ${duration} minutes</p>
+        
+        ${warmUpExercise ? `
+        <div class="exercise-section">
+            <p><strong>Warm-Up:</strong></p>
+            <div class="exercise-item">
+                <span>${warmUpExercise}</span>
+                <div class="exercise-description">${exerciseDescriptions[warmUpExercise] || "Description not available."}</div>
+            </div>
         </div>
-    </div>
-    ` : ''}
+        ` : ''}
+        
+        ${workoutType !== 'abs' ? `
+        <div class="exercise-section">
+            <p><strong>Compound Exercises:</strong></p>
+            ${compoundExercises.map(exercise => `
+                <div class="exercise-item">
+                    <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
+                          onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
+                    <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
+                </div>
+            `).join('')}
+        </div>
+        ` : ''}
+        
+        <div class="exercise-section">
+            <p><strong>Isolation Exercises:</strong></p>
+            ${isolationExercises.map(exercise => `
+                <div class="exercise-item">
+                    <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
+                          onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
+                    <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function selectExercises(availableExercises, numRequired) {
+    // First, select locked exercises
+    const lockedInCategory = availableExercises.filter(ex => lockedExercises.has(ex));
     
-    ${workoutType !== 'abs' ? `
-    <div class="exercise-section">
-        <p><strong>Compound Exercises:</strong></p>
-        ${compoundExercises.map(exercise => `
-            <div class="exercise-item">
-                <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
-                      onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
-                <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
-            </div>
-        `).join('')}
-    </div>
-    ` : ''}
+    // Remaining exercises that are not locked
+    const remainingExercises = availableExercises.filter(ex => !lockedExercises.has(ex));
     
-    <div class="exercise-section">
-        <p><strong>Isolation Exercises:</strong></p>
-        ${isolationExercises.map(exercise => `
-            <div class="exercise-item">
-                <span class="exercise-name ${lockedExercises.has(exercise) ? 'locked' : ''}" 
-                      onclick="toggleLock('${exercise}')">${exercise} ${lockedExercises.has(exercise) ? '🔒' : ''}</span>
-                <div class="exercise-description">${exerciseDescriptions[exercise] || "Description not available."}</div>
-            </div>
-        `).join('')}
-    </div>
-`;
+    // Combine locked and randomly selected exercises
+    const selectedExercises = [...lockedInCategory];
+    
+    while (selectedExercises.length < numRequired && remainingExercises.length > 0) {
+        const randomIndex = Math.floor(Math.random() * remainingExercises.length);
+        selectedExercises.push(remainingExercises[randomIndex]);
+        remainingExercises.splice(randomIndex, 1);
+    }
+    
+    return selectedExercises;
 }
 
 function toggleLock(exercise) {
-if (lockedExercises.has(exercise)) {
-    lockedExercises.delete(exercise);
-} else {
-    lockedExercises.add(exercise);
-}
-generateWorkout(); 
+    if (lockedExercises.has(exercise)) {
+        lockedExercises.delete(exercise);
+    } else {
+        lockedExercises.add(exercise);
+    }
+    generateWorkout();
 }
